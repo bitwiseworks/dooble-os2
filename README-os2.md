@@ -1,4 +1,4 @@
-# Port of Otter Browser to OS/2
+# Port of Dooble Browser to OS/2
 
 This repository is an effor to port [Dooble Browser](https://github.com/textbrowser/dooble) to the OS/2 operating system.
 
