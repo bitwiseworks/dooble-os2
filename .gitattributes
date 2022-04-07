@@ -1,0 +1,4 @@
+* linguist-vendored
+*.cc linguist-vendored=false
+
+Doxygen/* linguist-vendored=true

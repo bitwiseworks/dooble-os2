@@ -1,0 +1,12 @@
+# https://specifications.freedesktop.org/desktop-entry-spec/latest/apa.html
+
+[Desktop Entry]
+Categories=Network;WebBrowser;
+Comment=Dooble Web Browser
+Exec=/usr/bin/dooble
+GenericName=Dooble Web Browser
+Icon=dooble
+Name=Dooble Web Browser
+StartupNotify=true
+Terminal=false
+Type=Application

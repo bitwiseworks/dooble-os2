@@ -1,0 +1,24 @@
+DOOBLE_COOKIES_REPLACE_HYPHEN_WITH_UNDERSCORE
+
+Replace hyphens with underscores in cookie names.
+
+DOOBLE_FREEBSD_WEBENGINE_MISMATCH
+
+Enable if FreeBSD's Qt and WebEngine versions differ.
+
+DOOBLE_HMAC
+
+Use Dooble's HMAC implementation. Otherwise, QMessageAuthenticationCode
+is applied.
+
+DOOBLE_MMAN_PRESENT
+
+Lock memory into RAM via mman.
+
+DOOBLE_QTCHARTS_PRESENT
+
+Enabled if the QtCharts module is available.
+
+DOOBLE_REGISTER_GOPHER_SCHEME
+
+Force registration of Gopher scheme.

@@ -1,0 +1,226 @@
+Completed Items
+
+- Abort downloads if download items are purged.
+- Accepted / Blocked Domains File menu on Apple. Hide.
+- Accepted / Blocked Domains exceptions. New tool button right of Downloads;
+  exception of host or as-is link, A / B preferences.
+- Accepted / Blocked Domains search.
+- Activate history pull-down on address text change.
+- Allow certificate exceptions.
+- Allow hiding of panels in Accepted / Blocked Domains.
+- Allow opening of multiple favorites via Enter.
+- Allow removal of unchecked cookies.
+- Allow temporary acceptance of blocked dialogs.
+- Animated Scrolling belongs in the Web section.
+- Apples and shortcuts.
+- Application lock.
+- Auto-hide tab bar.
+- Blocked Domains. Show examples. Restrict input.
+- Bookmarks; favorites.
+- Certificate exceptions panel.
+- Clearing of Visited Links beyond Clear Items. New Edit menu item.
+- Close chart windows on lock. Confirmation not necessary. Windows will
+  not be destroyed.
+- Close non-browser windows via the Esc key.
+- Common methods for creating database tables.
+- Complete default WebEngine context menu.
+- Connect downloadRequested() to Downloads for the default profile.
+- Connect favorite_changed() across pages.
+- Cookie domains without child cookies.
+- Cookie identifiers.
+- Cookies Window - Toggle Shown.
+- Cookies are not always deleted properly.
+- Cookies menu item within Tools.
+- Correct QWebEngineUrlScheme::registerScheme: Scheme "gopher" is a
+  standard scheme. Added DOOBLE_REGISTER_GOPHER_SCHEME.
+- Create /usr/bin dooble file during Debian installation.
+- Creating new tabs and windows requires sophistication.
+- Ctrl + W shortcuts.
+- Custom icon sets. Icons from themes.
+- Debian distribution.
+- Delete temporary parent cookie domains having zero children.
+- Depict current tab on tabs pull-down menu.
+- Depict private cookie windows.
+- Determine if the system translation file is adequate.
+- Dictionary option in the Settings window's Web panel.
+- Disable the Theme setting on OS X.
+- Display Downloads panel on new download. Optional.
+- Display cookies in a tree-like structure.
+- Display download rates.
+- Display expected location of Translations in Settings.
+- Display the menu via a shortcut (F10?).
+- Do not store certificate exceptions for private windows.
+- Document the Microsoft Studio compilation process.
+- Documentation.
+- Download gopher content.
+  (gopher://gopher.quux.org/1Software/Operating Systems/Unix/Linux)
+- Gopher text search.
+- Download panel. Path. Remind user on exit.
+- Elided text in pull-down menus must consider invisible text.
+- Empty download file names.
+- Enable spell checking. Dictionaries are required.
+- Favorite-like search engines.
+- Favorites and disabled history.
+- Favorites icons.
+- Favorites in History.
+- Favorites in private windows. Strange.
+- Favorites pop-up widget.
+- Favorites search.
+- Filter current site's cookies.
+- Full-screen.
+- Fusion alterations.
+- Fusion themes.
+- Global Web plugin option.
+- Global address widget history model.
+- Gopher per-request sockets.
+- Gopher source viewing is disabled.
+- Gopher support.
+- Graphing! Provide TCP channels and custom data parsers.
+- Highlighted address-widget rows.
+- History search.
+- History. Will require a sub-process for removing expired data.
+- Hovered link label causes a resize of the main window if a lengthy
+  link is under the mouse cursor. Always consider the progress bar's width.
+- Icons for pinned support windows.
+- Inject custom style sheets.
+- Interruptible authentication.
+- JavaScript window.print() is not supported.
+- Language option. English, System.
+- Languages.
+- Link-hover events resize windows.
+- Local Storage option.
+- Local files and address text highlights.
+- Main menu bar visibility.
+- Maximum URL length set to 2048 characters.
+- Maximum title length set to 1024 characters.
+- More elegant popups.
+- New Web site.
+- New page context menus (dooble_web_engine_view::contextMenuEvent()).
+- Notify operator of completion of Accepted / Blocked Domains import.
+- Numeric values read from settings must be bounded.
+- OS X bundle.
+- Optional DNT.
+- Optional Visited Links.
+- Optional credentials.
+- Optional favicons.
+- Pause and resume downloads. Requires Qt support.
+- Pin support windows.
+- Place the Translations directory into the OS X bundle.
+- Populate search engine favicons on data changes.
+- Prevent duplicate history items in address widget menu.
+- Print preview.
+- Print support.
+- Print via popup menu.
+- Private Downloads containers.
+- Private-window decorations.
+- Provide immediate digest of current application in About.
+- Proxy details within Privacy.
+- Qt 5.10.
+- Qt's digest class. If DOOBLE_HMAC is not defined, HMACs are computed
+  via QMessageAuthenticationCode. Keccak is computed as H(Key || Message).
+- Rapid loading of address widget model icons.
+- Reduce cookie_added() signals.
+- Refresh page every 15, 30, 45, or 60 seconds.
+- Release notes.
+- Remove Headers from /Applications/Dooble.d/Dooble.app.
+- Remove m_history objects in the purge() method.
+- Replace fixed loops in AES.
+- Replace lessThan() with versionAtLeast() in dooble.pro for Qt 5.10.x.
+       linux {
+       !versionAtLeast(QT_VERSION, 5.10) {
+       error("Qt version 5.10.0, or newer, is required.")
+       }
+       } else {
+       lessThan(QT_VERSION, 5.9.3) {
+       error("Qt version 5.9.3, or newer, is required.")
+       }
+       }
+- Replace the containers_cleared() signal.
+- Report pages which attempt to open JS dialogs.
+- Restore default functionality of Control + A.
+- Restrict domains.
+- Save Page pop-up menu item.
+- Save menu item.
+- Search engine icons should be based on host names.
+- Send selected text to search engine.
+- Separate 1.x and 2.x.
+- Separate download items.
+- Separating pages renders incorrect page icons.
+- Should favorite links be refreshed whenever favicons are downloaded?
+- Signed Debian release.
+- Simple cleaning of all databases.
+- Smart tab selections via keyboards.
+- Sort history items on population.
+- Store certificate exceptions.
+- Super-fancy icon set.
+- Support windows as pages and non-Dooble icons.
+- Tab close buttons on the Mac should be on the right.
+- The random-bytes implementation uses a deprecated interface on Windows.
+  Replaced with QRandomGenerator.
+- Threefish-256.
+- UTC time zone option (qputenv("TZ", ":UTC")).
+- Update History icons on filter and sort.
+- Update pull-down menu icons in real-time.
+- User agent.
+- WebEngine context menu should allow for blocking sites.
+- WebEngine fonts.
+- WebGL option.
+- Windows PRNG.
+- Wobbly progress label.
+- Zoom information.
+- Zoom.
+- linkHovered() is emitted without user interaction.
+- mlock().
+
+Remaining Items
+
+- Allow custom JavaScript per URL.
+- Are containers empty? Remind if credentials exist.
+- Argon2, per request.
+- Auto-correct addresses.
+- Charts: data source status, multiple data sources,
+  removal of recorded curves, reset properties.
+- DTLS and Echo-DNS.
+- Default browser on Mac.
+- Disable JavaScript per domain.
+- Disable proxy for local addresses.
+- Element-selection option.
+- Fancy completer.
+- Generic Debian control file.
+- Include date stamps in cookie containers.
+- Inspect all available URLs when intercepting requests. Content blocking.
+- Optional referrer.
+- Optional testing of Threefish.
+- Qt 6.2 LTS:
+  Charts (Completed)
+  Charts Print (Completed)
+  Charts Print Preview (Completed)
+  Cryptography (Completed)
+  Deployment Debian (Completed)
+  Deployment FreeBSD (Unknown)
+  Deployment Mac (Completed)
+  Deployment OS/2 (Unknown)
+  Deployment OpenBSD (Unknown)
+  Deployment Windows (Completed)
+  Downloads (Completed)
+  Gopher (Completed)
+  Page Find (Completed)
+  Print (Completed)
+  Print Preview (Completed)
+  Shortcuts (Completed)
+  Web Page Context Menus (Completed)
+- Shortcuts browser.
+- Sign Debian release: new public keys.
+- South tab and Mac.
+- Translation browser.
+
+Unknown Items
+
+- Certificate information. Requires a WebEngine interface.
+- HMAC or KMAC.
+- Multiple certificate exceptions.
+- Optional Document Mode.
+- Socket states.
+- Study SQLITE_FCNTL_CHUNK_SIZE and sqlite3_file_control(). Remove synchronous
+  OFF.
+- Threefish tweak.
