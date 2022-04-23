@@ -1014,8 +1014,17 @@ void dooble_settings::prepare_web_engine_environment_variables(void)
 	      string.append(" ");
 	    }
 
+	QString old_env = QString::fromLocal8Bit
+	                  (qgetenv("QTWEBENGINE_CHROMIUM_FLAGS")).trimmed();
+	if (!old_env.isEmpty())
+	  {
+	    string.prepend(" ");
+	    string.prepend(old_env);
+	  }
+
 	qputenv
-	  ("QTWEBENGINE_CHROMIUM_FLAGS", string.trimmed().toUtf8().constData());
+	  ("QTWEBENGINE_CHROMIUM_FLAGS",
+	   string.trimmed().toLocal8Bit().constData());
       }
 
     db.close();
