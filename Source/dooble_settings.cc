@@ -966,13 +966,18 @@ void dooble_settings::prepare_table_statistics(void)
 
 void dooble_settings::prepare_web_engine_environment_variables(void)
 {
-  if(s_web_engine_settings_environment.isEmpty())
+  bool first_time;
+
+  if((first_time = s_web_engine_settings_environment.isEmpty()))
     {
       s_web_engine_settings_environment
 	["--blink-settings=forceDarkModeEnabled"] = "boolean";
       s_web_engine_settings_environment
 	["--ignore-certificate-errors"] = "singular";
       s_web_engine_settings_environment["--ignore-ssl-errors"] = "singular";
+#ifdef Q_OS_OS2
+      s_web_engine_settings_environment["--single-process"] = "singular";
+#endif
     }
 
   auto database_name(dooble_database_utilities::database_name());
@@ -988,6 +993,19 @@ void dooble_settings::prepare_web_engine_environment_variables(void)
       {
 	QSqlQuery query(db);
 	QString string("");
+
+      	if (first_time)
+      	  {
+#ifdef Q_OS_OS2
+	     /*
+	     ** On OS/2, single-process mode should be default for now
+	     ** due to stability issues with multi-process mode.
+	     */
+
+	     query.exec("INSERT OR IGNORE INTO dooble_web_engine_settings "
+	                "(environment_variable, key, value) VALUES (1, '--single-process', true)");
+#endif
+      	  }
 
 	query.setForwardOnly(true);
 	query.prepare
