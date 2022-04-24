@@ -243,7 +243,18 @@ dooble_settings::dooble_settings(void):dooble_main_window()
   m_ui.theme->setEnabled(false);
   m_ui.theme->setToolTip(tr("Windows only."));
 #endif
+#ifdef Q_OS_OS2
+  /*
+  ** TODO Temporarily fix UserAgent, see
+  ** https://github.com/bitwiseworks/dooble-os2/issues/3
+  ** https://github.com/bitwiseworks/qtwebengine-chromium-os2/issues/48
+  */
+  s_http_user_agent = QWebEngineProfile::defaultProfile()->httpUserAgent();
+  s_http_user_agent.replace("Unknown", "OS/2");
+  s_http_user_agent +=
+#else
   s_http_user_agent = QWebEngineProfile::defaultProfile()->httpUserAgent() +
+#endif
     " Dooble/" DOOBLE_VERSION_STRING;
   s_settings["accepted_or_blocked_domains_mode"] = "block";
   s_settings["access_new_tabs"] = true;
