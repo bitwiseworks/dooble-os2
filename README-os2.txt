@@ -1,4 +1,4 @@
-Dooble Web Broswer for OS/2
+Dooble Web Browser for OS/2
 ===========================
 
 Dooble is a cross-platform, free and open-source web browser based on the Qt
@@ -52,8 +52,9 @@ easiest way is to use the graphical front-end for RPM/YUM called Arca Noae
 Package Manager (ANPM).
 
 In ArcaOS the ANPM program is installed by default and can be found in the
-folder: Computer -> System Setup -> Arca Noae Package Manager. If you do not
-have ANPM installed for some reason, you can download it here:
+following folder on your desktop: Computer -> System Setup -> Arca Noae Package
+Manager. If you do not have ANPM installed or its version is too old, please
+download and install it from here:
 
 https://www.arcanoae.com/resources/downloadables/arca-noae-package-manager/
 
@@ -63,10 +64,70 @@ Step-by-step installation instructions:
 2. Update all packages on your system via Manage -> Yum Tools -> Update all.
 3. Restart your system after updating is finished.
 4. Launch ANPM again.
-5. Go to the "available" list, select Dooble browser and install it.
+5. Select "All matching packages" in the drop down box and go to "Available"
+   list.
+6. Scroll to "dooble" package, select and install it.
+
+Alternatively, if you prefer the command line, you may do the following:
+
+1. Run `yum update` and answer 'Y' to all queries.
+2. Reboot.
+3. Run `yum install dooble`.
 
 Note that with all the updates you need to install and Dooble browser itself
 you may need to download a few hundred megabytes.
+
+Please also read the following sections carefully to learn about Dooble usage
+specifics on the OS/2 platform.
+
+
+Updating Dooble
+---------------
+
+If you have a previous version of Dooble installed, it is strongly recommended
+to reset all Dooble settings and remove all your saved data by deleting the
+following folder:
+
+    %HOME%\.dooble
+
+Note that if you have some sensitive Dooble data you do not want to lose,
+please back it up before deleting (or export, when possible).
+
+If you only want to delete Dooble settings and leave your cache, cookies and
+the rest of saved user data intact, then it is enough to just delete this file:
+
+    %HOME%\.dooble\dooble_settings.db
+
+
+Single-process and multi-process Chromium modes
+-----------------------------------------------
+
+The Chromium engine used by Qt WebEngine and Doodle can operate in two modes:
+multi-process and single-process, with the former being normally the default
+one. In multi-process mode, there is a separate process per each web page
+(in a tab or window), plus a separate process for the browser GUI itself. This
+approach allows to distribute system resources more efficiently and also
+isolates web pages from each other which improves both security and
+performance. For example, if some web page contains faulty code that makes
+the browser engine hang or crash, all other pages will be left intact.
+
+On the contrary, in single-process mode, there is only one process that serves
+both the browser GUI and all the web pages. Besides security issues mentioned
+above, this also exposes a number of limits such as less tabs that can be
+opened at the same time.
+
+Due to a number of known issues in the OS/2 port of Chromium multi-process mode
+is not stable enough for regular use. Early testing shows that Dooble operates
+better in single-process mode so this mode is used by Dooble by default on
+OS/2.
+
+If you, however, want to test multi-process mode (which may give better results
+depending on your hardware), you may uncheck the respective checkbox on the
+Dooble Settings tab available via the Edit -> Settings menu entry. Select
+the Web settings page on the left, scroll down to the WebEngine group and look
+for a "--single-process" setting in the table - this is the setting responsible
+for single-process mode. Note that you must restart Dooble each time you change
+this (or any other setting in this table) in order for it to take effect.
 
 
 Known Limitations
@@ -93,7 +154,7 @@ Dooble for OS/2 (including OS/2 versions of Qt Toolkit version 5 and Chromium
 web browser) is kindly brought to you by bww bitwise works GmbH (Dmitriy
 Kuminov, Silvan Scherrer, Herwig Bauernfeind, https://www.bitwiseworks.com).
 
-Thanks to Elbert Pol for building and testing both Dooble an Qt at earlier
+Thanks to Elbert Pol for building and testing both Dooble and Qt at earlier
 stages of development.
 
 Thanks to Gregg Young for providing an initial RPM package and OS/2 icon for
