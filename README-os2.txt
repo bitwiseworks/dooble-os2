@@ -129,6 +129,10 @@ for a "--single-process" setting in the table - this is the setting responsible
 for single-process mode. Note that you must restart Dooble each time you change
 this (or any other setting in this table) in order for it to take effect.
 
+Note that single-mode is not officially supported by Google and is there for
+the purposes of testing and debugging Chromium. It is very likely it will
+disappear in future versions.
+
 
 Known Limitations
 -----------------
@@ -136,6 +140,11 @@ Known Limitations
 - Audio in youtube.com videos may only play for a few seconds and then go
   silent. This depends on a combination of the hardware installed in your
   computer.
+
+- Printing is not currently supported in Chromium on OS/2. Dooble will crash.
+
+- Private windows are not supported in single-process mode by Chromium. An
+  attempt to switch to it will make Dooble immediately exit.
 
 
 Contacts
