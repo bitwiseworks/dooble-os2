@@ -99,6 +99,31 @@ the rest of saved user data intact, then it is enough to just delete this file:
     %HOME%\.dooble\dooble_settings.db
 
 
+Font Configuration
+------------------
+
+In some cases (e.g. when you have CUPS installed) Dooble may not display any
+text on some web pages by default. This happens because CUPS uses Ghostscript
+which installs some outdated PostScript fonts with no Unicode support (like the
+Nimbus family) and also because OS/2 itself natively provides outdated
+PostScript fonts (Times New Roman, Helvetica and Courier) that also lack
+Unicode support.
+
+If you do not have a modern TrueType font with Unicode support (such as DejaVu)
+installed on your system, then the FontConfig library (used by many programs
+to select fonts, including Qt and Chromium) will select Nimbus and OS/2 Times
+New Roman as default fonts for the Chromium engine making the text disappear.
+
+A temporary solution to this problem is to go to Doodle settings, Web page,
+Fonts group and check that you have a modern TrueType font family selected
+there. Note that ArcaOS comes with Droid font family which works perfectly well
+when manually selected in Doodle settings.
+
+Future versions of FontConfig will resolve this issue by making any modern font
+family (including Droid) automatically selected instead of outdated PostScript
+fonts.
+
+
 Single-process and multi-process Chromium modes
 -----------------------------------------------
 
