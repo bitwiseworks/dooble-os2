@@ -75,20 +75,35 @@ void dooble_application::install_translator(void)
       auto variable(qgetenv("DOOBLE_TRANSLATIONS_PATH").trimmed());
 
       if(!variable.isEmpty())
-	path = QString::fromLocal8Bit(variable.constData());
+        path = QString::fromLocal8Bit(variable.constData());
 
       m_translator = new QTranslator(this);
 
       if(path.isEmpty())
-	ok = m_translator->load("dooble_" + QLocale::system().name(),
-				QDir::currentPath() +
-				QDir::separator() +
-				"Translations");
+      {
+        QList<QString> searchpaths{};
+        searchpaths.push_back(QDir::currentPath() + QDir::separator() + "Translations");
+#ifdef Q_OS_UNIX
+        searchpaths.push_back("/usr/local/share/dooble/translations/");
+        searchpaths.push_back("/opt/local/share/dooble/translations/");
+        searchpaths.push_back("/usr/share/dooble/translations/");
+        searchpaths.push_back("/opt/share/dooble/translations/");
+#elif defined(Q_OS_OS2)
+        searchpaths.push_back("/@unixroot/usr/local/share/dooble/translations/");
+        searchpaths.push_back("/@unixroot/usr/share/dooble/translations/");
+#endif
+        for(auto searchpath: searchpaths)
+        {
+          ok = m_translator->load("dooble_" + QLocale::system().name(), searchpath);
+          if (ok)
+          	break;
+        }
+      }
       else
-	ok = m_translator->load("dooble_" + QLocale::system().name(), path);
+        ok = m_translator->load("dooble_" + QLocale::system().name(), path);
 
       if(ok)
-	installTranslator(m_translator);
+        installTranslator(m_translator);
     }
 }
 

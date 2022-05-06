@@ -35,6 +35,7 @@
 #include <QWebEngineSettings>
 #include <QtConcurrent>
 
+
 #include "dooble.h"
 #include "dooble_accepted_or_blocked_domains.h"
 #include "dooble_application.h"
@@ -178,34 +179,56 @@ dooble_settings::dooble_settings(void):dooble_main_window()
     }
   else
     {
+      QList<QString> paths{};
       QString path("");
       auto variable(qgetenv("DOOBLE_TRANSLATIONS_PATH").trimmed());
 
       if(!variable.isEmpty())
-	path = QString::fromLocal8Bit(variable.constData());
+        path = QString::fromLocal8Bit(variable.constData());
       else
-	{
-	  path = QDir::currentPath();
-	  path.append(QDir::separator());
-	  path.append("Translations");
-	}
+      {
+        path = QDir::currentPath();
+        path.append(QDir::separator());
+        path.append("Translations");
+      }
 
       if(!path.endsWith(QDir::separator()))
-	path.append(QDir::separator());
+        path.append(QDir::separator());
+      paths.push_back(path);
+      
+#ifdef Q_OS_UNIX
+      paths.push_back("/usr/local/share/dooble/translations/");
+      paths.push_back("/opt/local/share/dooble/translations/");
+      paths.push_back("/usr/share/dooble/translations/");
+      paths.push_back("/opt/share/dooble/translations/");
+#elif defined(Q_OS_OS2)
+      paths.push_back("/@unixroot/usr/local/share/dooble/translations/");
+      paths.push_back("/@unixroot/usr/share/dooble/translations/");
+#endif
 
-      path.append
-	("dooble_" + QLocale::system().name().mid(3).toLower() + ".qm");
+      for(auto searchpath: paths)
+      {
+        searchpath.append
+          ("dooble_" + QLocale::system().name().mid(3).toLower() + ".qm");
+        QFileInfo testfileinfo(searchpath);
+        if (testfileinfo.exists() && testfileinfo.isReadable())
+        {
+          path = searchpath;
+          break;
+        }
+        
+      }
 
       QFileInfo file_info(path);
 
       if(!file_info.exists() || !file_info.isReadable())
-	{
-	  m_ui.language->model()->setData(m_ui.language->model()->index(1, 0),
-					  0,
-					  Qt::ItemDataRole(Qt::UserRole - 1));
-	  m_ui.language_directory->setStyleSheet
-	    ("QLabel {background-color: #f2dede; border: 1px solid #ebccd1;"
-	     "color:#a94442;}");
+      {
+        m_ui.language->model()->setData(m_ui.language->model()->index(1, 0),
+          0,
+          Qt::ItemDataRole(Qt::UserRole - 1));
+        m_ui.language_directory->setStyleSheet
+          ("QLabel {background-color: #f2dede; border: 1px solid #ebccd1;"
+         "color:#a94442;}");
 
 	  if(!file_info.exists())
 	    m_ui.language_directory->setText
