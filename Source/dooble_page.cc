@@ -49,6 +49,7 @@
 #include "dooble_history_window.h"
 #include "dooble_page.h"
 #include "dooble_popup_menu.h"
+#include "dooble_search_engines_popup.h"
 #include "dooble_style_sheet.h"
 #include "dooble_ui_utilities.h"
 #include "dooble_web_engine_page.h"
@@ -132,6 +133,10 @@ dooble_page::dooble_page(QWebEngineProfile *web_engine_profile,
 	  SIGNAL(started(void)),
 	  this,
 	  SLOT(slot_downloads_started(void)));
+  connect(dooble::s_settings,
+	  SIGNAL(applied(void)),
+	  m_popup_menu,
+	  SLOT(slot_settings_applied(void)));
   connect(dooble::s_settings,
 	  SIGNAL(applied(void)),
 	  this,
@@ -1089,7 +1094,7 @@ void dooble_page::prepare_standard_menus(void)
   m_full_screen_action = menu->addAction(tr("Show &Full Screen"),
 					 this,
 					 SIGNAL(show_full_screen(void)),
-					 QKeySequence(tr("F11")));
+					 QKeySequence(Qt::Key_F11));
   menu->addSeparator();
   action = menu->addAction(tr("&Status Bar"),
 			   this,
@@ -1535,8 +1540,11 @@ void dooble_page::slot_create_dialog_request(dooble_web_engine_view *view)
     {
       if(!m_last_javascript_popups.contains(view))
 	{
-	  if(dooble_page::ConstantsEnum::MAXIMUM_JAVASCRIPT_POPUPS <=
-	     m_last_javascript_popups.size())
+	  auto size = m_last_javascript_popups.size();
+
+	  if(size >=
+	     static_cast<decltype(size)> (dooble_page::ConstantsEnum::
+					  MAXIMUM_JAVASCRIPT_POPUPS))
 	    {
 	      view->deleteLater();
 	      return;
@@ -2097,7 +2105,26 @@ void dooble_page::slot_load_finished(bool ok)
 
 void dooble_page::slot_load_page(void)
 {
-  load(QUrl::fromUserInput(m_ui.address->text().trimmed()));
+  auto url(QUrl(m_ui.address->text().trimmed()));
+
+  if(dooble::s_search_engines_window && url.scheme().isEmpty())
+    {
+      auto url(dooble::s_search_engines_window->
+	       default_address_bar_engine_url());
+
+      if(!url.isEmpty() && url.isValid())
+	{
+	  url.setQuery
+	    (url.query().
+	     append(QString("\"%1\"").arg(m_ui.address->text().trimmed())));
+	  load(url);
+	  return;
+	}
+    }
+  else
+    url = QUrl::fromUserInput(m_ui.address->text().trimmed());
+
+  load(url);
 }
 
 void dooble_page::slot_load_progress(int progress)
@@ -2200,7 +2227,8 @@ void dooble_page::slot_prepare_backward_menu(void)
   QFontMetrics font_metrics(m_ui.backward->menu()->font());
   auto items
     (m_view->history()->
-     backItems(dooble_page::ConstantsEnum::MAXIMUM_HISTORY_ITEMS));
+     backItems(static_cast<int> (dooble_page::ConstantsEnum::
+				 MAXIMUM_HISTORY_ITEMS)));
 
   m_ui.backward->setEnabled(!items.empty());
 
@@ -2232,7 +2260,8 @@ void dooble_page::slot_prepare_forward_menu(void)
   QFontMetrics font_metrics(m_ui.forward->menu()->font());
   auto items
     (m_view->history()->
-     forwardItems(dooble_page::ConstantsEnum::MAXIMUM_HISTORY_ITEMS));
+     forwardItems(static_cast<int> (dooble_page::ConstantsEnum::
+				    MAXIMUM_HISTORY_ITEMS)));
 
   m_ui.forward->setEnabled(!items.empty());
 
@@ -2488,7 +2517,10 @@ void dooble_page::slot_show_web_settings_panel(void)
 
 void dooble_page::slot_url_changed(const QUrl &url)
 {
-  if(url.toString().length() > dooble::Limits::MAXIMUM_URL_LENGTH)
+  auto length = url.toString().length();
+
+  if(length >
+     static_cast<decltype(length)> (dooble::Limits::MAXIMUM_URL_LENGTH))
     return;
 
   /*

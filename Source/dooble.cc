@@ -1018,10 +1018,12 @@ void dooble::new_page(dooble_page *page)
   */
 
   auto title
-    (page->title().trimmed().mid(0, dooble::Limits::MAXIMUM_TITLE_LENGTH));
+    (page->title().trimmed().mid
+     (0, static_cast<int> (dooble::Limits::MAXIMUM_TITLE_LENGTH)));
 
   if(title.isEmpty())
-    title = page->url().toString().mid(0, dooble::Limits::MAXIMUM_URL_LENGTH);
+    title = page->url().toString().mid
+      (0, static_cast<int> (dooble::Limits::MAXIMUM_URL_LENGTH));
 
   if(title.isEmpty())
     title = tr("New Tab");
@@ -1077,10 +1079,12 @@ void dooble::new_page(dooble_web_engine_view *view)
   prepare_page_connections(page);
 
   auto title
-    (page->title().trimmed().mid(0, dooble::Limits::MAXIMUM_TITLE_LENGTH));
+    (page->title().trimmed().mid
+     (0, static_cast<int> (dooble::Limits::MAXIMUM_TITLE_LENGTH)));
 
   if(title.isEmpty())
-    title = page->url().toString().mid(0, dooble::Limits::MAXIMUM_URL_LENGTH);
+    title = page->url().toString().mid
+      (0, static_cast<int> (dooble::Limits::MAXIMUM_URL_LENGTH));
 
   if(title.isEmpty())
     title = tr("New Tab");
@@ -1722,10 +1726,10 @@ void dooble::prepare_shortcuts(void)
       m_shortcuts << new QShortcut(QKeySequence(tr("Ctrl+W")),
 				   this,
 				   SLOT(slot_close_tab(void)));
-      m_shortcuts << new QShortcut(QKeySequence(tr("F10")),
+      m_shortcuts << new QShortcut(QKeySequence(Qt::Key_F10),
 				   this,
 				   SLOT(slot_show_main_menu(void)));
-      m_shortcuts << new QShortcut(QKeySequence(tr("F11")),
+      m_shortcuts << new QShortcut(QKeySequence(Qt::Key_F11),
 				   this,
 				   SLOT(slot_show_full_screen(void)));
 
@@ -2017,7 +2021,7 @@ void dooble::prepare_standard_menus(void)
   m_full_screen_action = menu->addAction(tr("Show &Full Screen"),
 					 this,
 					 SLOT(slot_show_full_screen(void)),
-					 QKeySequence(tr("F11")));
+					 QKeySequence(Qt::Key_F11));
 
   /*
   ** Help Menu
@@ -2515,7 +2519,9 @@ void dooble::slot_about_to_show_history_menu(void)
 
   QFontMetrics font_metrics(m_ui.menu_history->font());
   auto icon_set(dooble_settings::setting("icon_set").toString());
-  auto list(s_history->last_n_actions(5 + dooble_page::MAXIMUM_HISTORY_ITEMS));
+  auto list
+    (s_history->last_n_actions(5 + static_cast<int> (dooble_page::
+						     MAXIMUM_HISTORY_ITEMS)));
   auto sub_menu = new QMenu(tr("Charts"));
   auto use_material_icons(dooble_settings::use_material_icons());
 
@@ -2728,11 +2734,11 @@ void dooble::slot_anonymous_tab_headers(bool state)
 	  {
 	    auto text
 	      (page->title().trimmed().
-	       mid(0, dooble::Limits::MAXIMUM_TITLE_LENGTH));
+	       mid(0, static_cast<int> (dooble::Limits::MAXIMUM_TITLE_LENGTH)));
 
 	    if(text.isEmpty())
 	      text = page->url().toString().mid
-		(0, dooble::Limits::MAXIMUM_URL_LENGTH);
+		(0, static_cast<int> (dooble::Limits::MAXIMUM_URL_LENGTH));
 
 	    if(text.isEmpty())
 	      text = tr("Dooble");
@@ -2898,11 +2904,12 @@ void dooble::slot_application_locked(bool state, dooble *d)
 	    {
 	      auto title
 		(page->title().
-		 trimmed().mid(0, dooble::Limits::MAXIMUM_TITLE_LENGTH));
+		 trimmed().mid
+		 (0, static_cast<int> (dooble::Limits::MAXIMUM_TITLE_LENGTH)));
 
 	      if(title.isEmpty())
 		title = page->url().toString().mid
-		  (0, dooble::Limits::MAXIMUM_URL_LENGTH);
+		  (0, static_cast<int> (dooble::Limits::MAXIMUM_URL_LENGTH));
 
 	      if(title.isEmpty())
 		title = tr("about:blank");
@@ -4383,8 +4390,9 @@ void dooble::slot_tab_index_changed(int index)
     setWindowTitle(tr("Dooble"));
   else
     setWindowTitle
-      (tr("%1 - Dooble").arg(page->title().trimmed().
-			     mid(0, dooble::Limits::MAXIMUM_TITLE_LENGTH)));
+      (tr("%1 - Dooble").
+       arg(page->title().trimmed().
+	   mid(0, static_cast<int> (dooble::Limits::MAXIMUM_TITLE_LENGTH))));
 
   page->hide_status_bar
     (!dooble_settings::setting("status_bar_visible").toBool());
@@ -4514,10 +4522,12 @@ void dooble::slot_title_changed(const QString &title)
   if(!page)
     return;
 
-  auto text(title.trimmed().mid(0, dooble::Limits::MAXIMUM_TITLE_LENGTH));
+  auto text(title.trimmed().
+	    mid(0, static_cast<int> (dooble::Limits::MAXIMUM_TITLE_LENGTH)));
 
   if(text.isEmpty())
-    text = page->url().toString().mid(0, dooble::Limits::MAXIMUM_URL_LENGTH);
+    text = page->url().toString().mid
+      (0, static_cast<int> (dooble::Limits::MAXIMUM_URL_LENGTH));
 
   if(text.isEmpty())
     text = tr("Dooble");
