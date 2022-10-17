@@ -116,7 +116,10 @@ QList<QAction *> dooble_search_engines_popup::actions(void) const
 
 QUrl dooble_search_engines_popup::default_address_bar_engine_url(void) const
 {
-  return m_default_address_bar_engine_url;
+  if(m_default_address_bar_engine_url.isEmpty())
+    return m_predefined_urls.value("DuckDuckGo");
+  else
+    return m_default_address_bar_engine_url;
 }
 
 void dooble_search_engines_popup::add_search_engine
@@ -326,7 +329,7 @@ void dooble_search_engines_popup::set_icon(const QIcon &icon, const QUrl &url)
 			Qt::MatchFixedString | Qt::MatchStartsWith,
 			1));
 
-  for(auto i : list)
+  foreach(auto i, list)
     {
       auto item = i ? m_model->item(i->row(), 0) : nullptr;
 
@@ -579,8 +582,14 @@ void dooble_search_engines_popup::slot_item_changed(QStandardItem *item)
 	update.prepare("UPDATE dooble_search_engines "
 		       "SET default_address_bar_engine = ? "
 		       "WHERE url_digest = ?");
-	update.addBindValue
-	  (dooble::s_cryptography->encrypt_then_mac("true").toBase64());
+
+	if(item->checkState() == Qt::Checked)
+	  update.addBindValue
+	    (dooble::s_cryptography->encrypt_then_mac("true").toBase64());
+	else
+	  update.addBindValue
+	    (dooble::s_cryptography->encrypt_then_mac("false").toBase64());
+
 	update.addBindValue
 	  (dooble::s_cryptography->hmac(item->data().toUrl().toEncoded()).
 	   toBase64());

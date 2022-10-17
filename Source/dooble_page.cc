@@ -456,11 +456,11 @@ dooble_page::dooble_page(QWebEngineProfile *web_engine_profile,
 
 dooble_page::~dooble_page()
 {
-  for(const auto &view : m_last_javascript_popups)
+  foreach(const auto &view, m_last_javascript_popups)
     if(view && view->parent() == this)
       view->deleteLater();
 
-  for(auto shortcut : m_shortcuts)
+  foreach(auto shortcut, m_shortcuts)
     delete shortcut;
 }
 
@@ -1463,7 +1463,7 @@ void dooble_page::slot_always_allow_javascript_popup(void)
   prepare_progress_label_position();
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-  for(const auto &view : m_last_javascript_popups)
+  foreach(const auto &view, m_last_javascript_popups)
     if(view && view->parent() == this)
       emit create_dialog(view);
 
@@ -1526,7 +1526,7 @@ void dooble_page::slot_close_javascript_popup_exception_frame(void)
   prepare_progress_label_position();
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-  for(const auto &view : m_last_javascript_popups)
+  foreach(const auto &view, m_last_javascript_popups)
     if(view && view->parent() == this)
       view->deleteLater();
 
@@ -2105,25 +2105,52 @@ void dooble_page::slot_load_finished(bool ok)
 
 void dooble_page::slot_load_page(void)
 {
-  auto url(QUrl(m_ui.address->text().trimmed()));
+  auto str(m_ui.address->text().trimmed());
+  auto url((QUrl(str))); // Special parentheses for compilers.
 
-  if(dooble::s_search_engines_window && url.scheme().isEmpty())
+  if((!url.isValid() ||
+      str.contains(' ') ||
+      str.contains('\t') ||
+      url.scheme().isEmpty()) &&
+     dooble::s_search_engines_window)
     {
-      auto url(dooble::s_search_engines_window->
-	       default_address_bar_engine_url());
-
-      if(!url.isEmpty() && url.isValid())
+      if(str.contains(' ') || str.contains('\t'))
 	{
-	  url.setQuery
-	    (url.query().
-	     append(QString("\"%1\"").arg(m_ui.address->text().trimmed())));
-	  load(url);
-	  return;
-	}
-    }
-  else
-    url = QUrl::fromUserInput(m_ui.address->text().trimmed());
+	search_label:
 
+	  auto url
+	    (dooble::s_search_engines_window->default_address_bar_engine_url());
+
+	  if(!url.isEmpty() && url.isValid())
+	    {
+	      url.setQuery(url.query().append(QString("%1").arg(str)));
+	      load(url);
+	      return;
+	    }
+	  else // Prevent an endless loop.
+	    {
+	      load(QUrl::fromUserInput(str));
+	      return;
+	    }
+	}
+
+      auto index = str.lastIndexOf('.');
+
+      if(index < str.size() && index > -1)
+	if(str.at(index + 1).isLetterOrNumber())
+	  {
+	    url = QUrl::fromUserInput(str);
+
+	    if(!url.isValid() || url.scheme().isEmpty())
+	      goto search_label;
+
+	    goto done_label;
+	  }
+
+      goto search_label;
+    }
+
+ done_label:
   load(url);
 }
 
@@ -2167,7 +2194,7 @@ void dooble_page::slot_load_started(void)
   emit iconChanged(QIcon());
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-  for(const auto &view : m_last_javascript_popups)
+  foreach(const auto &view, m_last_javascript_popups)
     if(view && view->parent() == this)
       view->deleteLater();
 
@@ -2199,7 +2226,7 @@ void dooble_page::slot_only_now_allow_javascript_popup(void)
   prepare_progress_label_position();
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-  for(const auto &view : m_last_javascript_popups)
+  foreach(const auto &view, m_last_javascript_popups)
     if(view && view->parent() == this)
       emit create_dialog(view);
 

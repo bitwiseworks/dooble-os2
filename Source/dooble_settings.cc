@@ -193,7 +193,7 @@ dooble_settings::dooble_settings(void):dooble_main_window()
       if(!path.endsWith(QDir::separator()))
 	path.append(QDir::separator());
 
-      path.append("dooble_" + QLocale::system().name() + ".qm");
+      path.append("dooble_" + QLocale::system().name().mid(0, 2) + ".qm");
 
       QFileInfo file_info(path);
 
@@ -416,7 +416,7 @@ dooble_settings::dooble_settings(void):dooble_main_window()
 	(tr("A valid list of dictionaries has not been prepared."));
     }
   else
-    for(const auto &i : s_spell_checker_dictionaries)
+    foreach(const auto &i, s_spell_checker_dictionaries)
       {
 	auto item = new QListWidgetItem(i);
 
@@ -632,7 +632,7 @@ int dooble_settings::site_feature_permission
 
   auto values(s_site_features_permissions.values(url));
 
-  for(const auto &value : values)
+  foreach(const auto &value, values)
     if(feature == QWebEnginePage::Feature(value.first) && value.first != -1)
       return value.second ? 1 : 0;
 
@@ -759,7 +759,7 @@ void dooble_settings::prepare_fonts(void)
 	     << QWebEngineSettings::SerifFont
 	     << QWebEngineSettings::StandardFont;
 
-    for(const auto family : families)
+    foreach(const auto family, families)
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
       fonts << QWebEngineSettings::defaultSettings()->fontFamily(family);
 #else
@@ -933,14 +933,14 @@ void dooble_settings::prepare_icons(void)
 		                           << m_ui.web
 		                           << m_ui.windows);
 
-  for(auto i : list)
+  foreach(auto i, list)
     if(i->height() >= size.height() || i->width() >= size.width())
       size = i->size();
 
   size.setHeight(size.height() + 10);
   size.setWidth(size.width() + 10);
 
-  for(auto i : list)
+  foreach(auto i, list)
     i->resize(size);
 }
 
@@ -1892,7 +1892,7 @@ void dooble_settings::set_site_feature_permission
     {
       auto values(s_site_features_permissions.values(url));
 
-      for(const auto &value : values)
+      foreach(const auto &value, values)
 	if(feature == QWebEnginePage::Feature(value.first) &&
 	   value.first != -1)
 	  {
@@ -3260,7 +3260,7 @@ void dooble_settings::slot_reset(void)
        << "dooble_settings.db"
        << "dooble_style_sheets.db";
 
-  for(const auto &i : list)
+  foreach(const auto &i, list)
     QFile::remove(setting("home_path").toString() +
 		  QDir::separator() +
 		  i);

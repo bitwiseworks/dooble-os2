@@ -27,6 +27,7 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QPainter>
 #include <QPointer>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
@@ -207,7 +208,7 @@ dooble::dooble(const QList<QUrl> &urls, bool is_private):QMainWindow()
   if(urls.isEmpty())
     new_page(QUrl(), is_private);
   else
-    for(const auto &url : urls)
+    foreach(const auto &url, urls)
       new_page(url, is_private);
 
   if(!s_containers_populated)
@@ -295,7 +296,7 @@ dooble::dooble(dooble_web_engine_view *view):QMainWindow()
 
 dooble::~dooble()
 {
-  for(auto shortcut : m_shortcuts)
+  foreach(auto shortcut, m_shortcuts)
     if(shortcut)
       shortcut->deleteLater();
 
@@ -368,7 +369,7 @@ bool dooble::can_exit(const dooble::CanExit can_exit)
 	    auto found = false;
 	    auto list(QApplication::topLevelWidgets());
 
-	    for(auto i : list)
+	    foreach(auto i, list)
 	      {
 		auto d = qobject_cast<dooble *> (i);
 
@@ -396,7 +397,7 @@ bool dooble::can_exit(const dooble::CanExit can_exit)
 	auto found = false;
 	auto list(QApplication::topLevelWidgets());
 
-	for(auto i : list)
+	foreach(auto i, list)
 	  {
 	    auto d = qobject_cast<dooble *> (i);
 
@@ -569,7 +570,7 @@ void dooble::closeEvent(QCloseEvent *event)
 
   auto list(QApplication::topLevelWidgets());
 
-  for(auto i : list)
+  foreach(auto i, list)
     if(i != this && qobject_cast<dooble *> (i))
       {
 	decouple_support_windows();
@@ -1166,7 +1167,7 @@ void dooble::open_tab_as_new_window(bool is_private, int index)
 
 void dooble::prepare_control_w_shortcut(void)
 {
-  for(auto shortcut : m_shortcuts)
+  foreach(auto shortcut, m_shortcuts)
     if(shortcut)
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
       if(QKeySequence(Qt::ControlModifier + Qt::Key_W) == shortcut->key())
@@ -1734,7 +1735,7 @@ void dooble::prepare_shortcuts(void)
 				   SLOT(slot_show_full_screen(void)));
 
 #ifdef Q_OS_MACOS
-      for(auto shortcut : m_shortcuts)
+      foreach(auto shortcut, m_shortcuts)
 	connect(shortcut,
 		SIGNAL(activated(void)),
 		this,
@@ -2114,7 +2115,7 @@ void dooble::prepare_tab_icons_text_tool_tips(void)
 
 void dooble::prepare_tab_shortcuts(void)
 {
-  for(auto tab_widget_shortcut : m_tab_widget_shortcuts)
+  foreach(auto tab_widget_shortcut, m_tab_widget_shortcuts)
     if(tab_widget_shortcut)
       tab_widget_shortcut->deleteLater();
 
@@ -2540,7 +2541,7 @@ void dooble::slot_about_to_show_history_menu(void)
       {
 	std::sort(list.begin(), list.end());
 
-	for(const auto &i : list)
+	foreach(const auto &i, list)
 	  {
 	    auto action = new QAction(i, this);
 
@@ -2569,7 +2570,7 @@ void dooble::slot_about_to_show_history_menu(void)
   if(!list.isEmpty())
     m_ui.menu_history->addSeparator();
 
-  for(auto i : list)
+  foreach(auto i, list)
     {
       connect(i,
 	      SIGNAL(triggered(void)),
@@ -2831,7 +2832,7 @@ void dooble::slot_application_locked(bool state, dooble *d)
  unlock_label:
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-  for(auto shortcut : m_shortcuts)
+  foreach(auto shortcut, m_shortcuts)
     if(shortcut)
       {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -3368,10 +3369,18 @@ void dooble::slot_floating_digital_dialog_timeout(void)
   font.setPointSize(25);
   m_floating_digital_clock_ui.clock->repaint();
   m_floating_digital_clock_ui.clock->setFont(font);
-  m_floating_digital_clock_ui.clock->setText
-    (QString("%1%2").
-     arg(now.time().toString("hh:mm:ss A")).
-     arg(utc == ":utc" ? " UTC" : ""));
+
+  if(m_floating_digital_clock_ui.hour_24->isChecked())
+    m_floating_digital_clock_ui.clock->setText
+      (QString("%1%2").
+       arg(now.time().toString("hh:mm:ss")).
+       arg(utc == ":utc" ? " UTC" : ""));
+  else
+    m_floating_digital_clock_ui.clock->setText
+      (QString("%1%2").
+       arg(now.time().toString("hh:mm:ss A")).
+       arg(utc == ":utc" ? " UTC" : ""));
+
   m_floating_digital_clock_ui.clock->update();
   font = m_floating_digital_clock_ui.date->font();
   font.setPointSize(15);
@@ -3395,7 +3404,7 @@ void dooble::slot_history_action_triggered(void)
 
 void dooble::slot_history_favorites_populated(void)
 {
-  for(const auto &pair : m_delayed_pages)
+  foreach(const auto &pair, m_delayed_pages)
     if(pair.first)
       pair.first->load(pair.second);
 
@@ -4087,6 +4096,9 @@ void dooble::slot_show_floating_digital_clock(void)
 	(Qt::WindowStaysOnTopHint |
 	 m_floating_digital_clock_dialog->windowFlags());
       m_floating_digital_clock_ui.setupUi(m_floating_digital_clock_dialog);
+      new QShortcut(QKeySequence(tr("Ctrl+W")),
+		    m_floating_digital_clock_dialog,
+		    SLOT(close(void)));
     }
 
   m_floating_digital_clock_dialog->repaint();
@@ -4596,7 +4608,7 @@ void dooble::slot_vacuum_databases(void)
   dialog.setWindowTitle(tr("Dooble: Vacuuming Databases"));
   dialog.show();
 
-  for(const auto &i : list)
+  foreach(const auto &i, list)
     {
       if(dialog.wasCanceled())
 	break;
@@ -4639,7 +4651,7 @@ void dooble::slot_warn_of_missing_sqlite_driver(void)
   auto found = false;
   auto list(QSqlDatabase::drivers());
 
-  for(const auto &i : list)
+  foreach(const auto &i, list)
     if(i.toLower().contains("sqlite"))
       {
 	found = true;
