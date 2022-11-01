@@ -193,8 +193,7 @@ dooble_settings::dooble_settings(void):dooble_main_window()
       if(!path.endsWith(QDir::separator()))
 	path.append(QDir::separator());
 
-      path.append
-	("dooble_" + QLocale::system().name().mid(3).toLower() + ".qm");
+      path.append("dooble_" + QLocale::system().name().mid(0, 2) + ".qm");
 
       QFileInfo file_info(path);
 
@@ -417,7 +416,7 @@ dooble_settings::dooble_settings(void):dooble_main_window()
 	(tr("A valid list of dictionaries has not been prepared."));
     }
   else
-    for(const auto &i : s_spell_checker_dictionaries)
+    foreach(const auto &i, s_spell_checker_dictionaries)
       {
 	auto item = new QListWidgetItem(i);
 
@@ -633,7 +632,7 @@ int dooble_settings::site_feature_permission
 
   auto values(s_site_features_permissions.values(url));
 
-  for(const auto &value : values)
+  foreach(const auto &value, values)
     if(feature == QWebEnginePage::Feature(value.first) && value.first != -1)
       return value.second ? 1 : 0;
 
@@ -760,7 +759,7 @@ void dooble_settings::prepare_fonts(void)
 	     << QWebEngineSettings::SerifFont
 	     << QWebEngineSettings::StandardFont;
 
-    for(const auto family : families)
+    foreach(const auto family, families)
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
       fonts << QWebEngineSettings::defaultSettings()->fontFamily(family);
 #else
@@ -784,6 +783,8 @@ void dooble_settings::prepare_fonts(void)
 	  if(list.at(i).isEmpty())
 	    list.replace(i, fonts.at(i));
 
+	  list.replace(i, list.at(i).trimmed());
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 	  QWebEngineSettings::defaultSettings()->setFontFamily
 	    (families.at(i), list.at(i));
@@ -794,19 +795,46 @@ void dooble_settings::prepare_fonts(void)
 	}
     }
 
-    font.fromString(list.at(0));
+    if(list.at(0).isEmpty() ||
+       !font.fromString(list.at(0)))
+      font = QApplication::font();
+
     m_ui.web_font_cursive->setCurrentFont(font);
-    font.fromString(list.at(1));
+
+    if(list.at(1).isEmpty() ||
+       !font.fromString(list.at(1)))
+      font = QApplication::font();
+
     m_ui.web_font_fantasy->setCurrentFont(font);
-    font.fromString(list.at(2));
+
+    if(list.at(2).isEmpty() ||
+       !font.fromString(list.at(2)))
+      font = QApplication::font();
+
     m_ui.web_font_fixed->setCurrentFont(font);
-    font.fromString(list.at(3));
+
+    if(list.at(3).isEmpty() ||
+       !font.fromString(list.at(3)))
+      font = QApplication::font();
+
     m_ui.web_font_pictograph->setCurrentFont(font);
-    font.fromString(list.at(4));
+
+    if(list.at(4).isEmpty() ||
+       !font.fromString(list.at(4)))
+      font = QApplication::font();
+
     m_ui.web_font_sans_serif->setCurrentFont(font);
-    font.fromString(list.at(5));
+
+    if(list.at(5).isEmpty() ||
+       !font.fromString(list.at(5)))
+      font = QApplication::font();
+
     m_ui.web_font_serif->setCurrentFont(font);
-    font.fromString(list.at(6));
+
+    if(list.at(6).isEmpty() ||
+       !font.fromString(list.at(6)))
+      font = QApplication::font();
+
     m_ui.web_font_standard->setCurrentFont(font);
   }
 
@@ -905,14 +933,14 @@ void dooble_settings::prepare_icons(void)
 		                           << m_ui.web
 		                           << m_ui.windows);
 
-  for(auto i : list)
+  foreach(auto i, list)
     if(i->height() >= size.height() || i->width() >= size.width())
       size = i->size();
 
   size.setHeight(size.height() + 10);
   size.setWidth(size.width() + 10);
 
-  for(auto i : list)
+  foreach(auto i, list)
     i->resize(size);
 }
 
@@ -982,6 +1010,8 @@ void dooble_settings::prepare_web_engine_environment_variables(void)
     {
       s_web_engine_settings_environment
 	["--blink-settings=forceDarkModeEnabled"] = "boolean";
+      s_web_engine_settings_environment
+	["--disable-reading-from-canvas"] = "singular";
       s_web_engine_settings_environment
 	["--ignore-certificate-errors"] = "singular";
       s_web_engine_settings_environment["--ignore-ssl-errors"] = "singular";
@@ -1140,6 +1170,7 @@ void dooble_settings::prepare_web_engine_settings(void)
 	  SIGNAL(itemChanged(QTableWidgetItem *)),
 	  this,
 	  SLOT(slot_web_engine_settings_item_changed(QTableWidgetItem *)));
+  m_ui.web_engine_settings->resizeColumnToContents(0);
   m_ui.web_engine_settings->sortItems(0);
 }
 
@@ -1797,6 +1828,11 @@ void dooble_settings::save_settings(void)
     set_setting("settings_geometry", saveGeometry().toBase64());
 }
 
+void dooble_settings::set_settings_path(const QString &path)
+{
+  m_ui.settings_path->setText(path);
+}
+
 void dooble_settings::set_site_feature_permission
 (const QUrl &url, QWebEnginePage::Feature feature, bool state)
 {
@@ -1856,7 +1892,7 @@ void dooble_settings::set_site_feature_permission
     {
       auto values(s_site_features_permissions.values(url));
 
-      for(const auto &value : values)
+      foreach(const auto &value, values)
 	if(feature == QWebEnginePage::Feature(value.first) &&
 	   value.first != -1)
 	  {
@@ -3224,7 +3260,7 @@ void dooble_settings::slot_reset(void)
        << "dooble_settings.db"
        << "dooble_style_sheets.db";
 
-  for(const auto &i : list)
+  foreach(const auto &i, list)
     QFile::remove(setting("home_path").toString() +
 		  QDir::separator() +
 		  i);

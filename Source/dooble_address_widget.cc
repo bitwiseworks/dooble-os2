@@ -402,7 +402,7 @@ void dooble_address_widget::set_text_format
 {
   QList<QInputMethodEvent::Attribute> attributes;
 
-  for(const auto &format : formats)
+  foreach(const auto format, formats)
     {
       auto attribute_type = QInputMethodEvent::TextFormat;
       auto length = format.length;
@@ -505,7 +505,7 @@ void dooble_address_widget::slot_populate
 {
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-  for(const auto &i : list)
+  foreach(const auto &i, list)
     m_completer->add_item(i.first, i.second);
 
   QApplication::restoreOverrideCursor();
@@ -571,7 +571,10 @@ void dooble_address_widget::slot_url_changed(const QUrl &url)
   if(!m_view)
     return;
 
-  if(url.toString().length() > dooble::Limits::MAXIMUM_URL_LENGTH)
+  auto length = url.toString().length();
+
+  if(length >
+     static_cast<decltype(length)> (dooble::Limits::MAXIMUM_URL_LENGTH))
     return;
 
   auto icon_set(dooble_settings::setting("icon_set").toString());

@@ -211,12 +211,13 @@ void dooble_address_widget_completer::complete(const QString &text)
 	      (levenshtein_distance(c, s_model->item(i, 0)->text().toLower()),
 	       s_model->item(i, 0));
 
-      list << map.values().mid(0, 2 * dooble_page::MAXIMUM_HISTORY_ITEMS);
+      list << map.values().mid
+	(0, 2 * static_cast<int> (dooble_page::MAXIMUM_HISTORY_ITEMS));
     }
 
   m_model->clear();
 
-  for(auto item : list)
+  foreach(auto item, list)
     if(item)
       {
 	if(item->icon().isNull())

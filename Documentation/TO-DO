@@ -70,6 +70,7 @@ Completed Items
 - Full-screen.
 - Fusion alterations.
 - Fusion themes.
+- Generic Debian control file. Debian is never current.
 - Global Web plugin option.
 - Global address widget history model.
 - Gopher per-request sockets.
@@ -103,6 +104,7 @@ Completed Items
 - Optional Visited Links.
 - Optional credentials.
 - Optional favicons.
+- Optional testing of Threefish.
 - Pause and resume downloads. Requires Qt support.
 - Pin support windows.
 - Place the Translations directory into the OS X bundle.
@@ -116,6 +118,24 @@ Completed Items
 - Provide immediate digest of current application in About.
 - Proxy details within Privacy.
 - Qt 5.10.
+- Qt 6.2 LTS:
+  Charts (Completed)
+  Charts Print (Completed)
+  Charts Print Preview (Completed)
+  Cryptography (Completed)
+  Deployment Debian (Completed)
+  Deployment FreeBSD (N/A)
+  Deployment Mac (Completed)
+  Deployment OS/2 (N/A)
+  Deployment OpenBSD (N/A)
+  Deployment Windows (Completed)
+  Downloads (Completed)
+  Gopher (Completed)
+  Page Find (Completed)
+  Print (Completed)
+  Print Preview (Completed)
+  Shortcuts (Completed)
+  Web Page Context Menus (Completed)
 - Qt's digest class. If DOOBLE_HMAC is not defined, HMACs are computed
   via QMessageAuthenticationCode. Keccak is computed as H(Key || Message).
 - Rapid loading of address widget model icons.
@@ -174,52 +194,34 @@ Completed Items
 
 Remaining Items
 
+- Additional files are necessary in Debian distribution.
 - Allow custom JavaScript per URL.
-- Are containers empty? Remind if credentials exist.
 - Argon2, per request.
 - Auto-correct addresses.
 - Charts: data source status, multiple data sources,
   removal of recorded curves, reset properties.
-- DTLS and Echo-DNS.
 - Default browser on Mac.
 - Disable JavaScript per domain.
 - Disable proxy for local addresses.
 - Element-selection option.
 - Fancy completer.
-- Generic Debian control file.
-- Include date stamps in cookie containers.
 - Inspect all available URLs when intercepting requests. Content blocking.
 - Optional referrer.
-- Optional testing of Threefish.
-- Qt 6.2 LTS:
-  Charts (Completed)
-  Charts Print (Completed)
-  Charts Print Preview (Completed)
-  Cryptography (Completed)
-  Deployment Debian (Completed)
-  Deployment FreeBSD (Unknown)
-  Deployment Mac (Completed)
-  Deployment OS/2 (Unknown)
-  Deployment OpenBSD (Unknown)
-  Deployment Windows (Completed)
-  Downloads (Completed)
-  Gopher (Completed)
-  Page Find (Completed)
-  Print (Completed)
-  Print Preview (Completed)
-  Shortcuts (Completed)
-  Web Page Context Menus (Completed)
+- Prevent SQL query text overflow.
 - Shortcuts browser.
-- Sign Debian release: new public keys.
-- South tab and Mac.
+- South tab and Mac. Qt-ism?
 - Translation browser.
 
 Unknown Items
 
+- Are containers empty? Remind if credentials exist.
 - Certificate information. Requires a WebEngine interface.
+- DTLS and Echo-DNS.
 - HMAC or KMAC.
+- Include date stamps in cookie containers.
 - Multiple certificate exceptions.
 - Optional Document Mode.
+- Sign Debian release: new public keys.
 - Socket states.
 - Study SQLITE_FCNTL_CHUNK_SIZE and sqlite3_file_control(). Remove synchronous
   OFF.
