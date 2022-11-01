@@ -616,7 +616,7 @@ void dooble_history::remove_items_list(const QList<QUrl> &urls)
 
   QList<QByteArray> url_digests;
 
-  for(const auto &url : urls)
+  foreach(const auto &url, urls)
     {
       auto list
 	(m_favorites_model->
@@ -654,7 +654,7 @@ void dooble_history::remove_items_list(const QList<QUrl> &urls)
 
 	    query.exec("PRAGMA synchronous = OFF");
 
-	    for(const auto &url_digest : url_digests)
+	    foreach(const auto &url_digest, url_digests)
 	      {
 		query.prepare
 		  ("DELETE FROM dooble_history WHERE url_digest = ?");
@@ -864,10 +864,12 @@ void dooble_history::save_item(const QIcon &icon,
 	hash[dooble_history::HistoryItem::TITLE] =
 	  m_history.value(item.url()).value
 	  (dooble_history::HistoryItem::TITLE,
-	   item.title().trimmed().mid(0, dooble::Limits::MAXIMUM_TITLE_LENGTH));
+	   item.title().trimmed().mid
+	   (0, static_cast<int> (dooble::Limits::MAXIMUM_TITLE_LENGTH)));
       else
 	hash[dooble_history::HistoryItem::TITLE] = item.title().trimmed().mid
-	  (0, dooble::Limits::MAXIMUM_TITLE_LENGTH);
+	  (0,
+	   static_cast<int> (dooble::Limits::MAXIMUM_TITLE_LENGTH));
 
       hash[dooble_history::HistoryItem::URL] = item.url();
 
@@ -1035,7 +1037,7 @@ void dooble_history::slot_populated_favorites
 {
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-  for(const auto &favorite : favorites)
+  foreach(const auto &favorite, favorites)
     {
       QList<QStandardItem *> list;
       auto last_visited(favorite.value(2));
@@ -1120,7 +1122,7 @@ void dooble_history::slot_remove_items(const QListUrl &urls)
   {
     QWriteLocker locker(&m_history_mutex);
 
-    for(const auto &url : urls)
+    foreach(const auto &url, urls)
       {
 	m_history_date_time.remove
 	  (m_history.value(url).value

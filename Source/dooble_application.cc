@@ -71,24 +71,38 @@ void dooble_application::install_translator(void)
   if(dooble_settings::setting("language_index").toInt() == 1) // System
     {
       QString path("");
-      auto ok = false;
+      auto name(QLocale::system().name());
       auto variable(qgetenv("DOOBLE_TRANSLATIONS_PATH").trimmed());
 
       if(!variable.isEmpty())
 	path = QString::fromLocal8Bit(variable.constData());
 
+      if(path.isEmpty())
+	path = QDir::currentPath() + QDir::separator() + "Translations";
+
       m_translator = new QTranslator(this);
 
-      if(path.isEmpty())
-	ok = m_translator->load("dooble_" + QLocale::system().name(),
-				QDir::currentPath() +
-				QDir::separator() +
-				"Translations");
+      if(m_translator->load("dooble_" + name, path))
+	{
+	  if(!installTranslator(m_translator))
+	    qDebug() << "Translator m_translator was not installed.";
+	}
       else
-	ok = m_translator->load("dooble_" + QLocale::system().name(), path);
+	qDebug() << "Translation file"
+		 << "dooble_" + name + ".qm"
+		 << "was not found.";
 
-      if(ok)
-	installTranslator(m_translator);
+      auto other = new QTranslator(this);
+
+      if(other->load("qtbase_" + name, path))
+	{
+	  if(!installTranslator(other))
+	    qDebug() << "Translator other was not installed.";
+	}
+      else
+	qDebug() << "Translation file"
+		 << "qtbase_" + name + ".qm"
+		 << "was not found.";
     }
 }
 
