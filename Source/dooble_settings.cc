@@ -178,26 +178,44 @@ dooble_settings::dooble_settings(void):dooble_main_window()
     }
   else
     {
-      QString path("");
+      // Should be in sync with dooble_application.cc.
+      QStringList paths;
       auto variable(qgetenv("DOOBLE_TRANSLATIONS_PATH").trimmed());
 
       if(!variable.isEmpty())
-	path = QString::fromLocal8Bit(variable.constData());
+	paths.append(QString::fromLocal8Bit(variable.constData()));
       else
 	{
-	  path = QDir::currentPath();
-	  path.append(QDir::separator());
-	  path.append("Translations");
+	  paths.append(QCoreApplication::applicationDirPath() + QDir::separator() + "Translations");
+#ifdef Q_OS_UNIX
+	  paths.append("/usr/local/share/dooble/translations");
+	  paths.append("/opt/local/share/dooble/translations");
+	  paths.append("/usr/share/dooble/translations");
+	  paths.append("/opt/share/dooble/translations");
+#elif defined(Q_OS_OS2)
+	  paths.append("/@unixroot/usr/local/share/dooble/translations");
+	  paths.append("/@unixroot/usr/share/dooble/translations");
+#endif
 	}
 
-      if(!path.endsWith(QDir::separator()))
-	path.append(QDir::separator());
+      QString name = "dooble_" + QLocale::system().name().mid(0, 2) + ".qm";
+      QFileInfo file_info;
+      int i;
 
-      path.append("dooble_" + QLocale::system().name().mid(0, 2) + ".qm");
+      for(i = 0; i < paths.size(); ++i)
+	{
+	  QString path = paths[i];
+	  if(!path.endsWith(QDir::separator()))
+	    path.append(QDir::separator());
 
-      QFileInfo file_info(path);
+	  path.append(name);
 
-      if(!file_info.exists() || !file_info.isReadable())
+	  file_info = QFileInfo(path);
+	  if(file_info.exists() && file_info.isReadable())
+	    break;
+	}
+
+      if(i == paths.size())
 	{
 	  m_ui.language->model()->setData(m_ui.language->model()->index(1, 0),
 					  0,
