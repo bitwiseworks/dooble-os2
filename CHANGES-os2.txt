@@ -1,0 +1,16 @@
+History of OS/2-specific changes for Dooble
+===========================================
+
+This file contains only OS/2-specific changes. Dooble's own changes are listed
+under Dooble's "Help -> Release Notes" main menu entry.
+
+Version 2022.10.15-os2 (2022-11-06)
+-----------------------------------
+
+- Update source to build 2022.10.15.
+- Fix Dooble translation file lookup [#12].
+
+Version 2022-04-04-os2 (2022-04-24)
+-----------------------------------
+
+- First public release.
